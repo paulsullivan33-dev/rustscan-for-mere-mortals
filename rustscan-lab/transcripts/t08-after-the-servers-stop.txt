@@ -1,0 +1,7 @@
+$ kill <the three fixture servers>
+
+$ ss -tln | grep -E "18083|18090|18091"
+(none of the fixture ports is listening any more)
+
+$ rustscan -a 127.0.0.1 -r 18080-18100 -g    (the same scan as t02, after the servers stopped)
+exit: 0  (silence: the range is empty now, and that is the correct answer)

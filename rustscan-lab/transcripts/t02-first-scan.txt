@@ -1,0 +1,12 @@
+$ time rustscan -a 127.0.0.1 -r 18080-18100 -g
+127.0.0.1 -> [18083,18084,18090,18091]
+
+real	0m0.006s
+user	0m0.002s
+sys	0m0.004s
+
+$ rustscan -a 127.0.0.1 -p 18083,18090,18091 -g    (exactly the three fixture ports)
+127.0.0.1 -> [18083,18090,18091]
+
+$ rustscan -a 127.0.0.1 -r 18085-18089 -g    (a stretch with nothing listening)
+exit: 0

@@ -1,0 +1,36 @@
+$ ulimit -Sn; ulimit -Hn
+4096
+4096
+
+$ time rustscan -a 127.0.0.1 -r 1-10000 -g    (default batch size 4500)
+
+real	0m0.800s
+user	0m0.302s
+sys	0m0.543s
+
+$ time rustscan -a 127.0.0.1 -r 1-10000 -g -b 500    (batch size 500)
+
+real	0m0.674s
+user	0m0.347s
+sys	0m0.414s
+
+$ time rustscan -a 127.0.0.1 -r 1-10000 -g -b 100    (batch size 100)
+
+real	0m0.623s
+user	0m0.395s
+sys	0m0.370s
+
+$ rustscan -a 127.0.0.1 -r 18080-18100 -g -t 50     (timeout 50 ms)
+127.0.0.1 -> [18090,18083,18084,18091]
+
+$ for i in 1 2 3; do rustscan -a 127.0.0.1 -r 18080-18100 -g -t 1; done   (timeout 1 ms, three tries)
+127.0.0.1 -> [18083,18084,18090,18091]
+(run 1 exit 0)
+127.0.0.1 -> [18083,18084,18090,18091]
+(run 2 exit 0)
+127.0.0.1 -> [18083,18084,18090,18091]
+(run 3 exit 0)
+
+$ rustscan -a 127.0.0.1 -r 18080-18100 -g --ulimit 60000   (asking RustScan to raise the file limit)
+127.0.0.1 -> [18083,18084,18090,18091]
+exit: 0

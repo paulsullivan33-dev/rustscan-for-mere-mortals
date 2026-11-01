@@ -1,0 +1,6 @@
+$ python3 -m http.server 18083 ... &    (fixture alpha started again, briefly)
+$ python3 rustscan-lab/verify-ports.py "127.0.0.1 -> [18083,18084,53764]"
+127.0.0.1:18083 OPEN
+127.0.0.1:18084 REFUSED (ConnectionRefusedError)
+127.0.0.1:53764 REFUSED (ConnectionRefusedError)
+exit: 0

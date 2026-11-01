@@ -1,0 +1,30 @@
+$ cat rustscan-lab/config-sample.toml
+# A RustScan config file, as used in transcript t06.
+# The same settings as the flags: -r 18080-18100 -g -b 500
+range = { start = 18080, end = 18100 }
+greppable = true
+batch_size = 500
+timeout = 1500
+tries = 1
+scan_order = "Serial"
+
+$ rustscan -c rustscan-lab/config-sample.toml -a 127.0.0.1    (no scan flags at all - the file supplies them)
+127.0.0.1 -> [18083,18084,18090,18091]
+
+$ rustscan -a rustscan-lab/targets.txt -r 18080-18100 -g    (addresses read from a file)
+127.0.0.1 -> [18083,18084,18090,18091]
+
+$ rustscan -a 127.0.0.1 -r 18080-18100 -e 18084 -g    (excluding the neighbour on 18084)
+127.0.0.1 -> [18083,18090,18091]
+
+$ rustscan -a 127.0.0.1 --top -g    (only the 1000 most common ports - none of ours are in it)
+127.0.0.1 -> [18084,18083,18090,18091,54338,55432]
+exit: 0  (no output: nothing common is open on this machine)
+
+$ rustscan -a 127.0.0.1 -r 18080-18100 -g --scan-order random
+127.0.0.1 -> [18091,18090,18084,18083]
+
+CORRECTION (added after t06b was run): the --top line above DID print ports,
+including high ones that no top-1000 list contains. The annotation on that line
+was written before the output was read properly. t06b investigates: in 2.4.1 as
+run here, --top alone behaved like a full-range scan. Trust the range flag.

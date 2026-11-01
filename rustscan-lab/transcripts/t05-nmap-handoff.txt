@@ -1,0 +1,64 @@
+$ nmap -A -p 18083,18090 127.0.0.1    (what RustScan asks nmap to do by default, tried directly)
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-11-01 02:28 UTC
+Couldn't open a raw socket. Error: Operation not permitted (1)
+
+$ nmap -sT -p 18083,18090,18091 127.0.0.1    (plain nmap, connect scan only)
+Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-11-01 02:28 UTC
+Nmap scan report for localhost (127.0.0.1)
+Host is up (0.00017s latency).
+
+PORT      STATE SERVICE
+18083/tcp open  unknown
+18090/tcp open  unknown
+18091/tcp open  unknown
+
+Nmap done: 1 IP address (1 host up) scanned in 0.03 seconds
+
+$ rustscan -a 127.0.0.1 -p 18083,18090,18091 -- -sT -sV    (hand-off with connect scan + service detection)
+[!] File limit is lower than default batch size. Consider upping with --ulimit. May cause harm to sensitive servers
+Open 127.0.0.1:18083
+Open 127.0.0.1:18091
+Open 127.0.0.1:18090
+[~] Starting Script(s)
+[>] Running script "nmap -vvv -p {{port}} -{{ipversion}} {{ip}} -sT -sV" on ip 127.0.0.1
+Depending on the complexity of the script, results may take some time to appear.
+[~] Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-11-01 02:28 UTC
+NSE: Loaded 46 scripts for scanning.
+Initiating Connect Scan at 02:28
+Scanning localhost (127.0.0.1) [3 ports]
+Discovered open port 18090/tcp on 127.0.0.1
+Discovered open port 18083/tcp on 127.0.0.1
+Discovered open port 18091/tcp on 127.0.0.1
+Completed Connect Scan at 02:28, 0.00s elapsed (3 total ports)
+Initiating Service scan at 02:28
+Scanning 3 services on localhost (127.0.0.1)
+Completed Service scan at 02:28, 6.02s elapsed (3 services on 1 host)
+NSE: Script scanning 127.0.0.1.
+NSE: Starting runlevel 1 (of 2) scan.
+Initiating NSE at 02:28
+Completed NSE at 02:28, 0.02s elapsed
+NSE: Starting runlevel 2 (of 2) scan.
+Initiating NSE at 02:28
+Completed NSE at 02:28, 0.01s elapsed
+Nmap scan report for localhost (127.0.0.1)
+Host is up, received localhost-response (0.00014s latency).
+Scanned at 2026-11-01 02:28:53 UTC for 6s
+
+PORT      STATE SERVICE REASON  VERSION
+18083/tcp open  http    syn-ack SimpleHTTPServer 0.6 (Python 3.12.3)
+18090/tcp open  http    syn-ack SimpleHTTPServer 0.6 (Python 3.12.3)
+18091/tcp open  http    syn-ack SimpleHTTPServer 0.6 (Python 3.12.3)
+
+Read data files from: /usr/bin/../share/nmap
+Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+Nmap done: 1 IP address (1 host up) scanned in 6.25 seconds
+           Raw packets sent: 0 (0B) | Rcvd: 0 (0B)
+
+exit: 0
+
+$ rustscan --no-banner -a 127.0.0.1 -p 18083    (the default hand-off, one port, watched closely)
+[!] File limit is lower than default batch size. Consider upping with --ulimit. May cause harm to sensitive servers
+Open 127.0.0.1:18083
+[~] Starting Script(s)
+[!] Error Exit code = 1
+exit: 0

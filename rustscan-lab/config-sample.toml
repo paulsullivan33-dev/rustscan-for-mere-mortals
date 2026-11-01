@@ -1,0 +1,8 @@
+# A RustScan config file, as used in transcript t06.
+# The same settings as the flags: -r 18080-18100 -g -b 500
+range = { start = 18080, end = 18100 }
+greppable = true
+batch_size = 500
+timeout = 1500
+tries = 1
+scan_order = "Serial"

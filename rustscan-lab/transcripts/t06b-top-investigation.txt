@@ -1,0 +1,53 @@
+$ ss -tln   (what is listening right now, all interfaces shown by local address)
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess
+LISTEN 0      0          127.0.0.1:55432      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18091      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18090      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18083      0.0.0.0:*          
+
+$ time rustscan -a 127.0.0.1 -r 1-65535 -g    (the whole port space, for comparison)
+127.0.0.1 -> [18083,18090,18091,40784,49094,49248,49618,55432]
+
+real	0m5.959s
+user	0m2.574s
+sys	0m2.623s
+
+$ time rustscan -a 127.0.0.1 --top -g    (again, timed)
+127.0.0.1 -> [18091,18083,18090,34072,49894,55432,58178]
+
+real	0m5.507s
+user	0m2.757s
+sys	0m2.836s
+
+$ rustscan -a 127.0.0.1 --top -p 22 -g    (does --top ignore an explicit port list?)
+exit: 0
+
+$ time rustscan -a 127.0.0.1 -r 1-1000 -g    (a genuinely small range, for timing comparison)
+
+real	0m0.132s
+user	0m0.025s
+sys	0m0.094s
+
+$ rustscan -a 127.0.0.1 -r 18080-18100 --top -g    (does an explicit range tame --top?)
+127.0.0.1 -> [18083,18090,18091]
+
+$ OUT=$(rustscan -a 127.0.0.1 -r 1-65535 -g); echo "$OUT"
+127.0.0.1 -> [18083,18090,18091,45894,55432]
+
+$ ss -tln | grep 0    (is the surprise port 0 a listener?)
+LISTEN 0      0          127.0.0.1:55432      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18091      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18090      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18083      0.0.0.0:*          
+
+$ curl -s -m 2 http://127.0.0.1:0/
+curl exit: 7
+
+$ rustscan -a 127.0.0.1 -r 1-65535 -g  ->  127.0.0.1 -> [18083,18090,18091,53764,55432]
+surprise port this run: 53764
+
+$ ss -tln | grep 53764
+(no listener on 53764 - it was never a service)
+
+$ curl -s -m 2 http://127.0.0.1:53764/
+curl exit: 7  (7 = connection refused)

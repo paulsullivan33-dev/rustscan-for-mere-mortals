@@ -1,0 +1,27 @@
+site_name: RustScan for Mere Mortals
+site_description: A very fast port scanner that knocks on every door of your own machines and hands the open ones to nmap. Batches, timeouts and the file limit explained, ghost ports exposed, the permission rule stated before the first scan, and the limits named plainly.
+site_url: https://paulsullivan33-dev.github.io/rustscan-for-mere-mortals/
+copyright: 'Part of <a href="https://paulsullivan33-dev.github.io/mere-mortals/">For Mere Mortals</a> · Text <a href="https://creativecommons.org/licenses/by/4.0/">CC BY 4.0</a>, code MIT'
+
+# Guides live at the repo root (nice for GitHub browsing).
+# The deploy workflow copies them into docs/ before building.
+theme:
+  name: material
+
+nav:
+  - Home: index.md
+  - What RustScan Is: what-rustscan-is.md
+  - The Moving Parts: the-moving-parts.md
+  - Installing RustScan: installing-rustscan.md
+  - Your First Scan: your-first-scan.md
+  - Reading the Results: reading-the-results.md
+  - Ranges, Lists and the Top Ports: ranges-lists-and-top.md
+  - Speed — Batches, Timeouts and Limits: speed-batches-and-timeouts.md
+  - The Nmap Hand-off: the-nmap-handoff.md
+  - Config Files and Target Lists: config-files-and-targets.md
+  - Recipes: recipes.md
+  - The Neighbours: the-neighbours.md
+  - Limits: limits.md
+  - Troubleshooting: troubleshooting.md
+  - Glossary: glossary.md
+  - Writing Criteria: criteria.md

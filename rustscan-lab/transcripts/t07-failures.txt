@@ -1,0 +1,19 @@
+$ rustscan -a no-such-host.invalid -r 18080-18100 -g
+exit: 1
+
+$ rustscan -a 127.0.0.1 -r 18100-18080 -g    (range written backwards)
+exit: 0
+
+$ rustscan -a 127.0.0.1 -p 99999 -g    (a port number that does not exist)
+error: invalid value '99999' for '--ports <PORTS>': 99999 is not in 0..=65535
+
+For more information, try '--help'.
+exit: 2
+
+$ timeout 10 rustscan -a 127.0.0.1 -r 18080-18100 -g -b 0    (batch size zero)
+exit: 0
+
+$ rustscan --no-banner -a no-such-host.invalid -r 18080-18100    (same failure, without -g)
+[!] Host "no-such-host.invalid" could not be resolved.
+[!] No IPs could be resolved, aborting scan.
+exit: 1

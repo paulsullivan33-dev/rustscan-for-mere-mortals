@@ -1,0 +1,31 @@
+$ python3 -m http.server 18083 --bind 127.0.0.1 --directory rustscan-lab/fixtures/www-alpha &
+$ python3 -m http.server 18090 --bind 127.0.0.1 --directory rustscan-lab/fixtures/www-bravo &
+$ python3 -m http.server 18091 --bind 127.0.0.1 --directory rustscan-lab/fixtures/www-charlie &
+
+$ ss -tln | grep -E "18083|18090|18091"
+LISTEN 0      0          127.0.0.1:18091      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18090      0.0.0.0:*          
+LISTEN 0      0          127.0.0.1:18083      0.0.0.0:*          
+
+$ curl -s http://127.0.0.1:18083/
+<!doctype html><title>fixture alpha</title><h1>fixture alpha - the kettle is on</h1>
+
+$ curl -s http://127.0.0.1:18090/
+<!doctype html><title>fixture bravo</title><h1>fixture bravo - the workshop bench</h1>
+
+$ curl -s http://127.0.0.1:18091/
+<!doctype html><title>fixture charlie</title><h1>fixture charlie - the garden gate</h1>
+
+$ curl -s http://127.0.0.1:18084/   (a port with nothing on it)
+<html>
+<head><title>403 Forbidden</title></head>
+<body>
+<center><h1>403 Forbidden</h1></center>
+<hr><center>nginx/1.24.0 (Ubuntu)</center>
+</body>
+</html>
+curl exit: 0
+
+NOTE appended to t01: port 18084 on this shared lab machine answers with an nginx
+belonging to another tenant of the same sandbox. It is not one of this guide's
+fixtures. Scans of the range below honestly report it too - see t02.
